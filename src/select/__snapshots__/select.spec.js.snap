@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a Select 1`] = `
+<div
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+    }
+  }
+>
+  <WithStyles(InputLabel)
+    style={
+      Object {
+        "fontSize": 12,
+      }
+    }
+  />
+  <WithStyles(Select)
+    fullWidth={true}
+    value=""
+  >
+    <WithStyles(MenuItem)
+      key="United States"
+      value="United States"
+    >
+      United States
+    </WithStyles(MenuItem)>
+    <WithStyles(MenuItem)
+      key="Canada"
+      value="Canada"
+    >
+      Canada
+    </WithStyles(MenuItem)>
+    <WithStyles(MenuItem)
+      key="Mexico"
+      value="Mexico"
+    >
+      Mexico
+    </WithStyles(MenuItem)>
+  </WithStyles(Select)>
+</div>
+`;
