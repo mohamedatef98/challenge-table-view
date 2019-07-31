@@ -1,7 +1,7 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button'
 
 import Select from '../select'
 import Table from '../table'
@@ -17,70 +17,66 @@ export default createReactClass({
     return {
       rows: [],
       filterBy: [],
-      columns: [],
+      columns: []
     }
   },
-  getInitialState(){
-    return {filterSelects: {}}
+  getInitialState () {
+    return { filterSelects: {} }
   },
-  setSelectedFilter(event, filterByElement){
+  setSelectedFilter (event, filterByElement) {
     this.setState(state => {
-        return { ...state, filterSelects: { ...state.filterSelects, [filterByElement]: event.target.value }}
+      return { ...state, filterSelects: { ...state.filterSelects, [filterByElement]: event.target.value } }
     })
   },
-  clearFilters(){
+  clearFilters () {
     this.setState(state => {
-      return {...state, filterSelects: {}}
+      return { ...state, filterSelects: {} }
     })
   },
   render () {
-    const { rows, filterBy, columns, ...rest } = this.props
+    const { rows, filterBy, columns } = this.props
 
-    const showButton = Object.keys(this.state.filterSelects).some((filterSelectKey)=>this.state.filterSelects[filterSelectKey].length > 0)
+    const showButton = Object.keys(this.state.filterSelects).some((filterSelectKey) => this.state.filterSelects[filterSelectKey].length > 0)
 
     const selects = filterBy.map((filterByElement, index) => {
-                      const allPossibleValuesForField = rows.reduce((acc, item)=>{
-                        acc[item[filterByElement.dataKey]] = undefined;
-                        return acc;
-                      }, {})
+      const allPossibleValuesForField = rows.reduce((acc, item) => {
+        acc[item[filterByElement.dataKey]] = undefined
+        return acc
+      }, {})
 
-                      return (<Select multiple autoWidth style={{width: '250px'}}
-                                key={index} 
-                                label={filterByElement.label} 
-                                items={Object.keys(allPossibleValuesForField)}
-                                value={this.state.filterSelects[filterByElement.dataKey] ? this.state.filterSelects[filterByElement.dataKey] : []} 
-                                onChange={event => this.setSelectedFilter(event, filterByElement.dataKey)}
-                              />)
-                    })
-
+      return (<Select multiple autoWidth style={{ width: '250px' }}
+        key={index}
+        label={filterByElement.label}
+        items={Object.keys(allPossibleValuesForField)}
+        value={this.state.filterSelects[filterByElement.dataKey] ? this.state.filterSelects[filterByElement.dataKey] : []}
+        onChange={event => this.setSelectedFilter(event, filterByElement.dataKey)}
+      />)
+    })
 
     const filteredData = rows.filter(row => {
-      return Object.keys(this.state.filterSelects).every((filterSelectKey)=>{
-        const filterSelectedValues = this.state.filterSelects[filterSelectKey];
-        return filterSelectedValues.length > 0 ? filterSelectedValues.some((filterSelectedValue => row[filterSelectKey] == filterSelectedValue)) : true
+      return Object.keys(this.state.filterSelects).every((filterSelectKey) => {
+        const filterSelectedValues = this.state.filterSelects[filterSelectKey]
+        return filterSelectedValues.length > 0 ? filterSelectedValues.some(filterSelectedValue => row[filterSelectKey] === '' + filterSelectedValue) : true
       })
     })
 
-
-    
-
     return (
       <div>
-        <div style={{display: 'flex'}}>
-        {
-          selects
-        }
-        {
-          <div>
-            {
-              showButton > 0 && (<Button variant="contained" color="secondary" onClick={this.clearFilters}>
+        <div style={{ display: 'flex' }}>
+          {
+            selects
+          }
+          {
+            <div>
+              {
+                showButton > 0 && (<Button variant='contained' color='secondary' onClick={this.clearFilters}>
                               CLEAR FILTERS
-                            </Button>)
-            }
-          </div>
-        }
+                </Button>)
+              }
+            </div>
+          }
         </div>
-        <Table rows={filteredData} columns={columns}/>
+        <Table rows={filteredData} columns={columns} />
       </div>
     )
   }
