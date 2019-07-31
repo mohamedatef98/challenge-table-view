@@ -10,12 +10,14 @@ export default createReactClass({
   displayName: 'TableView',
   propTypes: {
     items: PropTypes.array,
-    filterBy: PropTypes.array
+    filterBy: PropTypes.array,
+    columns: PropTypes.array
   },
   getDefaultProps () {
     return {
       items: [],
-      filterBy: []
+      filterBy: [],
+      columns: [],
     }
   },
   getInitialState(){
@@ -32,7 +34,7 @@ export default createReactClass({
     })
   },
   render () {
-    const { items, filterBy, ...rest } = this.props
+    const { items, filterBy, columns, ...rest } = this.props
 
     const showButton = Object.keys(this.state.filterSelects).some((filterSelectKey)=>this.state.filterSelects[filterSelectKey].length > 0)
 
@@ -51,7 +53,6 @@ export default createReactClass({
                               />)
                     })
 
-    const columns = [{label: 'Title', dataKey: 'title'}, {label: 'Genre', dataKey: 'genre'}, {label: 'Rating', dataKey: 'rating'}]
 
     const filteredData = items.filter(item => {
       return Object.keys(this.state.filterSelects).every((filterSelectKey)=>{
