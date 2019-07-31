@@ -7,6 +7,6 @@ state: {
 ---
 <TableView
     items={data}
-    filterBy={['genre', 'rating']}
+    filterBy={[ { 'label': 'Genre', 'dataKey': 'genre' }, { 'label': 'Rating', 'dataKey': 'rating' }]}
 />
 ```
