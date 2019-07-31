@@ -5,8 +5,9 @@ import Button from '@material-ui/core/Button'
 
 import Select from '../select'
 import Table from '../table'
+import { withStyles } from '@material-ui/core'
 
-export default createReactClass({
+const TableView = createReactClass({
   displayName: 'TableView',
   propTypes: {
     rows: PropTypes.array,
@@ -34,7 +35,7 @@ export default createReactClass({
     })
   },
   render () {
-    const { rows, filterBy, columns } = this.props
+    const { rows, filterBy, columns, classes } = this.props
 
     const showButton = Object.keys(this.state.filterSelects).some((filterSelectKey) => this.state.filterSelects[filterSelectKey].length > 0)
 
@@ -44,7 +45,7 @@ export default createReactClass({
         return acc
       }, {})
 
-      return (<Select multiple autoWidth style={{ width: '250px' }}
+      return (<Select multiple autoWidth className={classes.filterItem}
         key={index}
         label={filterByElement.label}
         items={Object.keys(allPossibleValuesForField)}
@@ -62,22 +63,33 @@ export default createReactClass({
 
     return (
       <div>
-        <div style={{ display: 'flex' }}>
+        <div className={classes.filtersBox}>
           {
             selects
           }
-          {
-            <div>
-              {
-                showButton > 0 && (<Button variant='contained' color='secondary' onClick={this.clearFilters}>
-                              CLEAR FILTERS
-                </Button>)
-              }
-            </div>
-          }
+          <div>
+            {
+              showButton > 0 && (<Button variant='contained' color='secondary' onClick={this.clearFilters} className={classes.filterItem}>
+                            CLEAR FILTERS
+              </Button>)
+            }
+          </div>
         </div>
         <Table rows={filteredData} columns={columns} />
       </div>
     )
   }
 })
+
+const styles = () => ({
+  filtersBox: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  filterItem: {
+    width: '250px',
+    margin: '0rem 1rem'
+  }
+})
+
+export default withStyles(styles)(TableView)
