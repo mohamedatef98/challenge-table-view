@@ -1,6 +1,8 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
+import Button from '@material-ui/core/Button';
+
 import Select from '../select'
 import Table from '../table'
 
@@ -20,41 +22,62 @@ export default createReactClass({
     return {filterSelects: {}}
   },
   setSelectedFilter(event, filterByElement){
-    this.setState({
-        filterSelects: { ...this.state.filterSelects, [filterByElement]: event.target.value }
+    this.setState(state => {
+        return { ...state, filterSelects: { ...state.filterSelects, [filterByElement]: event.target.value }}
+    })
+  },
+  clearFilters(){
+    this.setState(state => {
+      return {...state, filterSelects: {}}
     })
   },
   render () {
     const { items, filterBy, ...rest } = this.props
 
-    const CockPit = <div style={{display: 'flex', justifyContent: 'space-between'}}>
-      {
-        this.props.filterBy.map((filterByElement, index) => {
-          const allPossibleValuesForField = this.props.items.reduce((acc, item)=>{
-            acc[item[filterByElement]] = undefined;
-            return acc;
-          }, {})
+    const showButton = Object.keys(this.state.filterSelects).some((filterSelectKey)=>this.state.filterSelects[filterSelectKey].length > 0)
 
-          return (<Select multiple autoWidth 
-                    key={index} 
-                    label={filterByElement} 
-                    items={Object.keys(allPossibleValuesForField)}
-                    value={this.state.filterSelects[filterByElement] ? this.state.filterSelects[filterByElement] : []} 
-                    onChange={event => this.setSelectedFilter(event, filterByElement)}
-                  />)
-        })
-    }
-    {
-      this.props.filterBy.length > 0 && 0
-        
-    }
-    </div>
+    const selects = filterBy.map((filterByElement, index) => {
+                      const allPossibleValuesForField = items.reduce((acc, item)=>{
+                        acc[item[filterByElement]] = undefined;
+                        return acc;
+                      }, {})
+
+                      return (<Select multiple autoWidth 
+                                key={index} 
+                                label={filterByElement} 
+                                items={Object.keys(allPossibleValuesForField)}
+                                value={this.state.filterSelects[filterByElement] ? this.state.filterSelects[filterByElement] : []} 
+                                onChange={event => this.setSelectedFilter(event, filterByElement)}
+                              />)
+                    })
+
+    const columns = [{label: 'Title', dataKey: 'title'}, {label: 'Genre', dataKey: 'genre'}, {label: 'Rating', dataKey: 'rating'}]
+
+    const filteredData = items.filter(item => {
+      return Object.keys(this.state.filterSelects).every((filterSelectKey)=>{
+        const filterSelectedValues = this.state.filterSelects[filterSelectKey];
+        console.log(filterSelectedValues)
+        return filterSelectedValues.length > 0 ? filterSelectedValues.some((filterSelectedValue => item[filterSelectKey] == filterSelectedValue)) : true
+      })
+    })
+
+
+    
 
     return (
       <div>
+        <div style={{display: 'flex'}}>
         {
-            CockPit
+          selects
         }
+        {
+          showButton > 0 && (<Button variant="contained" color="secondary" onClick={this.clearFilters}>
+                              CLEAR FILTERS
+                            </Button>)
+            
+        }
+        </div>
+        <Table rows={filteredData} columns={columns}/>
       </div>
     )
   }
