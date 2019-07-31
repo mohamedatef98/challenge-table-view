@@ -9,13 +9,13 @@ import Table from '../table'
 export default createReactClass({
   displayName: 'TableView',
   propTypes: {
-    items: PropTypes.array,
+    rows: PropTypes.array,
     filterBy: PropTypes.array,
     columns: PropTypes.array
   },
   getDefaultProps () {
     return {
-      items: [],
+      rows: [],
       filterBy: [],
       columns: [],
     }
@@ -34,12 +34,12 @@ export default createReactClass({
     })
   },
   render () {
-    const { items, filterBy, columns, ...rest } = this.props
+    const { rows, filterBy, columns, ...rest } = this.props
 
     const showButton = Object.keys(this.state.filterSelects).some((filterSelectKey)=>this.state.filterSelects[filterSelectKey].length > 0)
 
     const selects = filterBy.map((filterByElement, index) => {
-                      const allPossibleValuesForField = items.reduce((acc, item)=>{
+                      const allPossibleValuesForField = rows.reduce((acc, item)=>{
                         acc[item[filterByElement.dataKey]] = undefined;
                         return acc;
                       }, {})
@@ -54,10 +54,10 @@ export default createReactClass({
                     })
 
 
-    const filteredData = items.filter(item => {
+    const filteredData = rows.filter(row => {
       return Object.keys(this.state.filterSelects).every((filterSelectKey)=>{
         const filterSelectedValues = this.state.filterSelects[filterSelectKey];
-        return filterSelectedValues.length > 0 ? filterSelectedValues.some((filterSelectedValue => item[filterSelectKey] == filterSelectedValue)) : true
+        return filterSelectedValues.length > 0 ? filterSelectedValues.some((filterSelectedValue => row[filterSelectKey] == filterSelectedValue)) : true
       })
     })
 
