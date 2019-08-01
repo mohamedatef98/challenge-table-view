@@ -7,6 +7,17 @@ import Select from '../select'
 import Table from '../table'
 import { withStyles } from '@material-ui/core'
 
+const styles = () => ({
+  filtersBox: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  filterItem: {
+    width: '250px',
+    margin: '0rem 1rem'
+  }
+})
+
 const TableView = createReactClass({
   displayName: 'TableView',
   propTypes: {
@@ -35,7 +46,7 @@ const TableView = createReactClass({
     })
   },
   render () {
-    const { rows, filterBy, columns, classes } = this.props
+    const { rows, filterBy, columns } = this.props
 
     const showButton = Object.keys(this.state.filterSelects).some((filterSelectKey) => this.state.filterSelects[filterSelectKey].length > 0)
 
@@ -46,7 +57,7 @@ const TableView = createReactClass({
       }, {})
 
       return (<Select multiple autoWidth 
-        className={classes.filterItem}
+        style={styles().filterItem}
         key={index}
         label={filterByElement.label}
         items={Object.keys(allPossibleValuesForField)}
@@ -64,13 +75,13 @@ const TableView = createReactClass({
 
     return (
       <div>
-        <div className={classes.filtersBox}>
+        <div style={styles().filtersBox}>
           {
             selects
           }
           <div>
             {
-              showButton > 0 && (<Button variant='contained' color='secondary' onClick={this.clearFilters} className={classes.filterItem}>
+              showButton > 0 && (<Button variant='contained' color='secondary' onClick={this.clearFilters} style={styles().filterItem}>
                             CLEAR FILTERS
               </Button>)
             }
@@ -82,15 +93,6 @@ const TableView = createReactClass({
   }
 })
 
-const styles = () => ({
-  filtersBox: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  filterItem: {
-    width: '250px',
-    margin: '0rem 1rem'
-  }
-})
 
-export default withStyles(styles)(TableView)
+
+export default TableView
