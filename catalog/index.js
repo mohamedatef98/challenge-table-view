@@ -31,7 +31,7 @@ const pages = [
       },
       {
         path: '/components/table-view',
-        title: 'Table View',
+        title: 'TableView',
         imports: {
           TableView: require('../src').TableView,
           data: require('./pages/fixtures/movies.json')
