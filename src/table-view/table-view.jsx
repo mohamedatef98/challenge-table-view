@@ -45,7 +45,8 @@ const TableView = createReactClass({
         return acc
       }, {})
 
-      return (<Select multiple autoWidth className={classes.filterItem}
+      return (<Select multiple autoWidth 
+        className={classes.filterItem}
         key={index}
         label={filterByElement.label}
         items={Object.keys(allPossibleValuesForField)}
@@ -57,7 +58,7 @@ const TableView = createReactClass({
     const filteredData = rows.filter(row => {
       return Object.keys(this.state.filterSelects).every((filterSelectKey) => {
         const filterSelectedValues = this.state.filterSelects[filterSelectKey]
-        return filterSelectedValues.length > 0 ? filterSelectedValues.some(filterSelectedValue => row[filterSelectKey] === '' + filterSelectedValue) : true
+        return filterSelectedValues.length > 0 ? filterSelectedValues.some( filterSelectedValue => `${row[filterSelectKey]}` === `${filterSelectedValue}` ) : true
       })
     })
 
